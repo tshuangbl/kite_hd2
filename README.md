@@ -12,7 +12,7 @@ The mismatch t2g file is used by `bustools count` to generate a Features x Cells
 
 In this way, kallisto | bustools will effectively search the sequencing data for the Feature Barcodes and their Hamming distance = 1 neighbors. We find that for Feature Barcodes of moderate length (6-15bp) pre-processing is remarkably fast and the results equivalent to or better than those from traditional alignment.
 
-A walk-through from the kallisto | bustools [Tutorials](https://www.kallistobus.tools/tutorials) page is reproduced below, and a complete Feature Barcode analysis can be found in the [docs](https://github.com/pachterlab/kite/tree/master/docs/) directory of the `kite` GitHub repository.
+A walk-through from the kallisto | bustools [Tutorials](https://www.kallistobus.tools/tutorials) page is reproduced below.
 
 ## kite Installation
 Clone the GitHub repo to obtain the core featuremap_hd2.py program and some useful accessory files. 
@@ -50,7 +50,7 @@ To avoid potential pseudoalignment errors arising from inverted repeats, kallist
 
 ## Brief Example: 1k PBMCs from a Healthy Donor - Gene Expression and Cell Surface Protein
 
-The [docs](https://github.com/pachterlab/kite/tree/master/docs) folder contains a complete analysis for a 10x dataset collected on ~730 peripheral blood mononuclear cells (PBMCs) labeled with 17 unique Feature Barcoded antibodies. The dataset can be found [here](https://support.10xgenomics.com/single-cell-gene-expression/datasets/3.0.0/pbmc_1k_protein_v3). 
+The [docs](https://github.com/tshuangbl/kite_hd2/tree/master/docs) folder contains a complete analysis for a 10x dataset collected on ~730 peripheral blood mononuclear cells (PBMCs) labeled with 17 unique Feature Barcoded antibodies. The dataset can be found [here](https://support.10xgenomics.com/single-cell-gene-expression/datasets/3.0.0/pbmc_1k_protein_v3). 
 
 ### 0. Clone the GitHub repository
 Prepare a folder and clone the repo:
@@ -71,7 +71,7 @@ $ tar -xvzf ./pbmc_1k_protein_v3_filtered_feature_bc_matrix.tar.gz
 $ wget https://github.com/BUStools/getting_started/releases/download/species_mixing/10xv3_whitelist.txt
 ```
 ### 2. Make the mismatch FASTA and t2g files
-Start by preparing a csv-formatted matrix of Feature Barcode names and Feaure Barcode sequences as input. Do not include any common or constant sequences. In this case, we parsed the feature_ref.csv file provided by 10x to give a properly formatted csv (below). Example code for this step and a correctly formatted file (FeatureBarcodes.csv) is included in the [kite GitHub repo](https://github.com/pachterlab/kite/docs/).
+Start by preparing a csv-formatted matrix of Feature Barcode names and Feaure Barcode sequences as input. Do not include any common or constant sequences. In this case, we parsed the feature_ref.csv file provided by 10x to give a properly formatted csv (below). Example code for this step and a correctly formatted file (FeatureBarcodes.csv) is included in the [kite GitHub repo](https://github.com/tshuangbl/kite_hd2/docs/).
 
 |Feature Barcode name|Feature Barcode sequence|
 | ------------- | ------------- |
@@ -150,4 +150,4 @@ $ mkdir ./featurecounts/
 $ bustools count -o ./featurecounts/featurecounts --genecounts -g ./FeaturesMismatch.t2g -e ./matrix.ec -t ./transcripts.txt ./output_sorted.bus
 ```
 ### 6. Analyze count matrix
-`Bustools count` outputs a .mtx-formatted Features x Cells matrix and vectors of gene names and cell barcodes (genes.txt and barcodes.txt). From here, standard analysis packages like ScanPy and Seurat can be used to continue the Feature Barcode analysis. For details, check out the [Jupyter notebook](https://github.com/pachterlab/kite/tree/master/docs/).
+`Bustools count` outputs a .mtx-formatted Features x Cells matrix and vectors of gene names and cell barcodes (genes.txt and barcodes.txt). From here, standard analysis packages like ScanPy and Seurat can be used to continue the Feature Barcode analysis. For details, check out the original [Jupyter notebook](https://github.com/pachterlab/kite/tree/master/docs/) from pachterlab.
