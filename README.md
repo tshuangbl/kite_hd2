@@ -1,4 +1,6 @@
-# _kite_: kallisto indexing and tag extraction
+# _kite\_hd2__: kallisto indexing and tag extraction, with hamming distance of 2
+
+*_note:_* You can find the original KITE repo at https://github.com/pachterlab/kite 
 
 This package enables fast and accurate pre-processing of Feature Barcoding experiments, a common datatype in single-cell genomics. In Feature Barcoding assays, cellular data are recorded as short DNA sequences using procedures adapted from single-cell RNA-seq. 
 
@@ -13,9 +15,9 @@ In this way, kallisto | bustools will effectively search the sequencing data for
 A walk-through from the kallisto | bustools [Tutorials](https://www.kallistobus.tools/tutorials) page is reproduced below, and a complete Feature Barcode analysis can be found in the [docs](https://github.com/pachterlab/kite/tree/master/docs/) directory of the `kite` GitHub repository.
 
 ## kite Installation
-Clone the GitHub repo to obtain the core featuremap.py program and some useful accessory files. 
+Clone the GitHub repo to obtain the core featuremap_hd2.py program and some useful accessory files. 
 ```
-$ git clone https://github.com/pachterlab/kite
+$ git clone https://github.com/tshuangbl/kite_hd2
 ```
 ## System Requirements
 Feature Barcode pre-processing requires up-to-date versions of `kallisto` and `bustools`
@@ -28,8 +30,11 @@ For downstream analysis, we use [ScanPy](https://scanpy.readthedocs.io/en/stable
 
 ## kite pre-processing
 
-#### `featuremap.py FeatureBarcodes.csv --t2g ./FeaturesMismatch.t2g --fa ./FeaturesMismatch.fa --header --quiet`
-The featuremap.py program is run prior to the standard kallisto | bustools pipeline. It takes a .csv input and outputs "mismatch" transcript-to-gene (t2g) and fasta (fa) files that can be used by kallisto | bustools to complete pre-processing (see below and Vignettes). The program takes a single argument, FeatureBarcodes.csv, and outputs mismatch fasta and t2g files.
+#### `featuremap_hd2.py FeatureBarcodes.csv --t2g ./FeaturesMismatch.t2g --fa ./FeaturesMismatch.fa --header --quiet`
+#### If original hamming distance of 1 is desired, please use featuremap.py instead
+
+
+The featuremap_hd2.py program is run prior to the standard kallisto | bustools pipeline. It takes a .csv input and outputs "mismatch" transcript-to-gene (t2g) and fasta (fa) files that can be used by kallisto | bustools to complete pre-processing (see below and Vignettes). The program takes a single argument, FeatureBarcodes.csv, and outputs mismatch fasta and t2g files.
 
 `FeatureBarcodes.csv` path to a .csv-formatted file containing Feature Barcode names and sequences
 
@@ -52,7 +57,7 @@ Prepare a folder and clone the repo:
 ```
 $ mkdir kallisto_bustools_kite/
 $ cd kallisto_bustools_kite/
-$ git clone https://github.com/pachterlab/kite
+$ git clone https://github.com/tshuangbl/kite_hd2
 ```
 
 ### 1. Download materials
@@ -87,9 +92,9 @@ Start by preparing a csv-formatted matrix of Feature Barcode names and Feaure Ba
 |IgG1_control_TotalSeqB|ACTCACTGGAGTCTC|
 |IgG2b_control_TotalSeqB| ATCACATCGTTGCCA|
 
-Now run featuremap.py, which creates a mismatch FASTA file and a mismatch t2g file for the experiment. Here the `--header` flag is used to indicate the header in the first row of FeatureBarcodes.csv. In this case the mismatch files each have 782 entries and by default are named FeaturesMismatch.t2g and FeaturesMismatch.fa.
+Now run featuremap_hd2.py, which creates a mismatch FASTA file and a mismatch t2g file for the experiment. Here the `--header` flag is used to indicate the header in the first row of FeatureBarcodes.csv. In this case the mismatch files each have 782 entries and by default are named FeaturesMismatch.t2g and FeaturesMismatch.fa.
 ```
-$ ./kite/featuremap/featuremap.py FeatureBarcodes.csv --header
+$ ./kite/featuremap/featuremap_hd2.py FeatureBarcodes.csv --header
 ```
 __Note:__ kallisto only accepts odd values for the k-mer length, so if your Feature Barcodes are even in length, add a constant base on either side before running featuremap.py. For example, append an __A__ base to the CD3_TotalSeqB barcode AACAAGACCCTTGAG &rarr; AACAAGACCCTTGAGA
 
@@ -100,18 +105,18 @@ Because Feature Barcodes are typically designed to be robust to some sequencing 
 ```
 $head -n 4 ./10xFeatures_t2g.txt
 CD3_TotalSeqB	CD3_TotalSeqB	CD3_TotalSeqB
-CD3_TotalSeqB-0-1	CD3_TotalSeqB	CD3_TotalSeqB
-CD3_TotalSeqB-0-2	CD3_TotalSeqB	CD3_TotalSeqB
-CD3_TotalSeqB-0-3	CD3_TotalSeqB	CD3_TotalSeqB
+CD3_TotalSeqB-0-1-0-1	CD3_TotalSeqB	CD3_TotalSeqB
+CD3_TotalSeqB-0-2-0-1	CD3_TotalSeqB	CD3_TotalSeqB
+CD3_TotalSeqB-0-3-0-1	CD3_TotalSeqB	CD3_TotalSeqB
 
 $head -n 8 ./10xFeaturesMismatch.fa
 >CD3_TotalSeqB
 AACAAGACCCTTGAG
->CD3_TotalSeqB-0-1
+>CD3_TotalSeqB-0-1-0-1
 TACAAGACCCTTGAG
->CD3_TotalSeqB-0-2
+>CD3_TotalSeqB-0-2-0-1
 GACAAGACCCTTGAG
->CD3_TotalSeqB-0-3
+>CD3_TotalSeqB-0-3-0-1
 CACAAGACCCTTGAG
 ```
 
